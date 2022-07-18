@@ -1,0 +1,23 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,600;1,500&display=swap');
+
+body{
+    background-color:wheat;
+}
+
+select{
+ font-family: 'Ibarra Real Nova', serif;
+ font-weight: 500;
+ font-size: 20px;
+    
+}
+label{
+    font-family: 'Ibarra Real Nova', serif;
+    font-weight: 600;
+    font-size: 30px;
+    padding-right: 5px;
+}
+
+.opt{
+    width: 50rem;
+}

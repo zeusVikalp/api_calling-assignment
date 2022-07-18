@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-// import {useParams} from 'react-router-dom'
-// const axios = require("axios");
+import './All_data.css'
+import MyChart from '../Chart/Chart';
 
 export const All_Data = () => {
-	// const {username} = useParams()
 	const [data, setData] = useState();
-	const [iso, setIso] = useState('');
+	const [city, setCity] = useState(null);
 
 	const handleChange = (e) => {
-		// setIso(e.target.value);
-		// fetchCity();
+		setCity(null);
+		fetchCity(e.target.value);
 	};
 	const fetchData = () => {
 		fetch('https://covid-19-statistics.p.rapidapi.com/regions', {
@@ -25,7 +24,7 @@ export const All_Data = () => {
 			.catch((err) => console.log(err));
 	};
 
-	const fetchCity = () => {
+	const fetchCity = (iso) => {
 		const options = {
 			method: 'GET',
 			headers: {
@@ -40,38 +39,44 @@ export const All_Data = () => {
 			options,
 		)
 			.then((response) => response.json())
-			.then((response) => setIso(response.data))
+			.then((response) => setCity(response.data))
 			.catch((err) => console.error(err));
 	};
 
 	useEffect(() => {
 		fetchData();
-    fetchCity();
-    
+		fetchCity();
 	}, []);
 
-
-	console.log(iso);
 	return (
 		<div>
-			<button onClick={fetchData}>GetData</button>
 			<br />
-			<label for='cars'>select the country</label>
-			<select name='select the city' id='' onChange={handleChange}>
-				<option value=''>Select the country</option>
+			<label for='cars'>Select the country</label>
+			
+			<select name='select the city'  onChange={handleChange}>
+				<option className='opt' value=''>Select the country</option>
 				{data &&
 					data.length !== 0 &&
 					data?.map((item) => (
 						<option value={item.iso}>{item.name}</option>
 					))}
 			</select>
+            <br/><br/>
+			<div>
+				<label for='cars'>Select the city</label>
+				<select name='select the city' id=''>
+					<option className='opt' value=''>Select the city</option>
+					{city &&
+						city.length !== 0 &&
+						city?.map((item) => (
+							<option value={item.iso}>{item.province}</option>
+						))}
+				</select>
+			</div>
 
-      <div>
-        <label htmlFor="state">States</label>
-        <div>
-          {iso && iso.length!==0 && iso?.map((state) => (<li>{iso.province}</li>)) }
-        </div>
-      </div>
+			{city && city.length !== 0 && (
+				<MyChart country={data} city={city} />
+			)}
 		</div>
 	);
 };
